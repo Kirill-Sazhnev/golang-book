@@ -45,8 +45,8 @@ func (m *MultiShape) area() float64 {
 func main() {
   multiShape := MultiShape{ //array of structs
   shapes: []Shape{ //array of interfaces
-    Circle{0,0,5}, // why do we assign values to the interface? Interface is list of methods not values
-    Rectangle{0,0,10,10},
+    &Circle{0,0,5}, // why do we assign values to the interface? Interface is list of methods not values
+    &Rectangle{0,0,10,10},
     },
   }
   fmt.Println(multiShape.area())
