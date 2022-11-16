@@ -31,14 +31,14 @@ func main() {
 	converter := drawTable(fahToCel, "F", "C")
 	for i := 0; i < 7; i++ {
 		temp := temperature(rand.Intn(30) * 5)
-		fmt.Printf("| %-8v | %-8.2f |\n", temp, converter(temp))
+		fmt.Printf("| %-8.2v | %-8.2f |\n", temp, converter(temp))
 	}
 	fmt.Println("=======================")
 
 	converter = drawTable(celToFah, "C", "F")
 	for i := 0; i < 7; i++ {
 		temperature := temperature(rand.Intn(13)+8) * 5
-		fmt.Printf("| %-8v | %-8.2f |\n", temperature, converter(temperature))
+		fmt.Printf("| %-8.2v | %-8.2f |\n", temperature, converter(temperature))
 	}
 	fmt.Println("=======================")
 }
