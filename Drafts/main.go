@@ -1,48 +1,32 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func display(board [8][8]rune) {
-	for _, row := range board {
-		for _, column := range row {
-			if column == 0 {
-				fmt.Print("  ")
-			} else {
-				fmt.Printf("%c ", column)
-			}
-		}
-		fmt.Println()
+type Planets []string
+
+func (p Planets) terraform() {
+
+	for i, planet := range p {
+		p[i] = "New " + planet
 	}
 }
 
 func main() {
-	var board [8][8]rune
+	planets := Planets{"Mars", "Uranus", "Neptun"}
 
-	// черные фигуры
-	board[0][0] = 'r'
-	board[0][1] = 'n'
-	board[0][2] = 'b'
-	board[0][3] = 'q'
-	board[0][4] = 'k'
-	board[0][5] = 'b'
-	board[0][6] = 'n'
-	board[0][7] = 'r'
+	planets.terraform()
 
-	// пешки
-	for column := range board[1] {
-		board[1][column] = 'p'
-		board[6][column] = 'P'
-	}
-
-	// белые фигуры
-	board[7][0] = 'R'
-	board[7][1] = 'N'
-	board[7][2] = 'B'
-	board[7][3] = 'Q'
-	board[7][4] = 'K'
-	board[7][5] = 'B'
-	board[7][6] = 'N'
-	board[7][7] = 'R'
-
-	display(board)
+	fmt.Println(planets)
 }
+
+/*
+Напишите программу для преобразования слайса строки через добавление слова
+"Новый " перед названием планеты. Используйте программу для изменения
+ названий планет Марс, Уран и Нептун.
+
+В первой итерации может использоваться функция terraform, но в конечной
+реализации должен быть введен тип Planets с методом terraform, похожим на
+sort.StringSlice.
+*/
