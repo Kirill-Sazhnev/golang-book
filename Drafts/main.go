@@ -4,29 +4,20 @@ import (
 	"fmt"
 )
 
-type Planets []string
+func main() {
 
-func (p Planets) terraform() {
+	s := []string{}
+	lastCap := cap(s)
 
-	for i, planet := range p {
-		p[i] = "New " + planet
+	for i := 0; i < 100; i++ {
+		s = append(s, "An element")
+		if cap(s) != lastCap {
+			fmt.Println(cap(s))
+			lastCap = cap(s)
+		}
 	}
 }
 
-func main() {
-	planets := Planets{"Mars", "Uranus", "Neptun"}
-
-	planets.terraform()
-
-	fmt.Println(planets)
-}
-
 /*
-Напишите программу для преобразования слайса строки через добавление слова
-"Новый " перед названием планеты. Используйте программу для изменения
- названий планет Марс, Уран и Нептун.
 
-В первой итерации может использоваться функция terraform, но в конечной
-реализации должен быть введен тип Planets с методом terraform, похожим на
-sort.StringSlice.
-*/
+ */
