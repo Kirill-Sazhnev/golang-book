@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	width  = 65
+	width  = 75
 	height = 15
 )
 
@@ -29,7 +29,7 @@ func (u Universe) Show() {
 			if x {
 				fmt.Printf("%v", "*")
 			} else {
-				fmt.Printf("%v", "_")
+				fmt.Printf("%v", " ")
 			}
 		}
 		fmt.Println()
@@ -86,13 +86,7 @@ func (u Universe) Next(x, y int) bool {
 	n := u.Neighbors(x, y)
 	a := u.Alive(x, y)
 
-	if a && n < 2 {
-		return false
-	} else if a && (n == 2 || n == 3) {
-		return true
-	} else if a && n > 3 {
-		return false
-	} else if !a && n == 3 {
+	if (a && n == 2) || n == 3 {
 		return true
 	} else {
 		return false
@@ -130,7 +124,6 @@ func main() {
 		Step(uni, clone)
 		uni, clone = clone, uni
 		time.Sleep(time.Second / 4)
-
 		cls()
 	}
 
