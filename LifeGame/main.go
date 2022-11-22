@@ -129,7 +129,7 @@ func main() {
 
 		Step(uni, clone)
 		uni, clone = clone, uni
-		time.Sleep(time.Second / 3)
+		time.Sleep(time.Second / 4)
 
 		cls()
 	}
