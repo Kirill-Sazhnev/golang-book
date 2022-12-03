@@ -2,65 +2,114 @@ package main
 
 import (
 	"fmt"
-	"math"
+	"math/rand"
+	"time"
 )
 
-type world struct {
-	radius float64
+// Пчела
+type honeyBee struct {
+	name string
 }
 
-type location struct {
-	name      string
-	lat, long float64
+func (hb honeyBee) String() string {
+	return hb.name
 }
 
-func (l location) description() string {
-	return fmt.Sprintf("%v (%.1f°, %.1f°)", l.name, l.lat, l.long)
+func (hb honeyBee) move() string {
+	switch rand.Intn(2) {
+	case 0:
+		return "жужжит"
+	default:
+		return "летает и веселится"
+	}
 }
 
-type gps struct {
-	world       world
-	current     location
-	destination location
+func (hb honeyBee) eat() string {
+	switch rand.Intn(2) {
+	case 0:
+		return "пыльцу"
+	default:
+		return "нектар"
+	}
 }
 
-func (g gps) distance() float64 {
-	return g.world.distance(g.current, g.destination)
+// Суслик
+type gopher struct {
+	name string
 }
 
-func (g gps) message() string {
-	return fmt.Sprintf("%.1f km to %v", g.distance(), g.destination.description())
+func (g gopher) String() string {
+	return g.name
 }
 
-func (w world) distance(p1, p2 location) float64 {
-	s1, c1 := math.Sincos(rad(p1.lat))
-	s2, c2 := math.Sincos(rad(p2.lat))
-	clong := math.Cos(rad(p1.long - p2.long))
-	return w.radius * math.Acos(s1*s2+c1*c2*clong)
+func (g gopher) move() string {
+	switch rand.Intn(2) {
+	case 0:
+		return "гулят и изучает территорию"
+	default:
+		return "прячется в норку"
+	}
 }
 
-func rad(deg float64) float64 {
-	return deg * math.Pi / 180
+func (g gopher) eat() string {
+	switch rand.Intn(5) {
+	case 0:
+		return "морковку"
+	case 1:
+		return "салат-латук"
+	case 2:
+		return "редиску"
+	case 3:
+		return "кукурузу"
+	default:
+		return "корнеплоды"
+	}
 }
 
-type rover struct {
-	gps
+type animal interface {
+	move() string
+	eat() string
 }
+
+func step(a animal) {
+	switch rand.Intn(2) {
+	case 0:
+		fmt.Printf("%v %v.\n", a, a.move())
+	default:
+		fmt.Printf("%v кушает %v.\n", a, a.eat())
+	}
+}
+
+const sunrise, sunset = 8, 18
 
 func main() {
-	mars := world{radius: 3389.5}
-	bradbury := location{"Bradbury Landing", -4.5895, 137.4417}
-	elysium := location{"Elysium Planitia", 4.5, 135.9}
+	rand.Seed(time.Now().UnixNano())
 
-	gps := gps{
-		world:       mars,
-		current:     bradbury,
-		destination: elysium,
+	animals := []animal{
+		honeyBee{name: "Шмель Базз"},
+		gopher{name: "Суслик Го"},
 	}
 
-	curiosity := rover{
-		gps: gps,
-	}
+	var sol, hour int
 
-	fmt.Println(curiosity.message()) // Выводит: 545.4 km to Elysium Planitia (4.5°, 135.9°)
+	for {
+		fmt.Printf("%2d:00 ", hour)
+		if hour < sunrise || hour >= sunset {
+			fmt.Println("Животные спят.")
+		} else {
+			i := rand.Intn(len(animals))
+			step(animals[i])
+		}
+
+		time.Sleep(500 * time.Millisecond)
+
+		hour++
+		if hour >= 24 {
+			hour = 0
+			sol++
+			if sol >= 3 {
+				break
+			}
+		}
+	}
 }

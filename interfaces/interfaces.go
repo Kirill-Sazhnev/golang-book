@@ -22,20 +22,6 @@ func (j Journal) Read(personName string) string {
 	return personName + " read " + j.Text
 }
 
-func main() {
-	me := "Jafree"
-
-	var somethingToRead Reader
-
-	shopToVisit := ShopA{}
-
-	somethingToRead = shopToVisit.Sell()
-
-	weirdLine := somethingToRead.Read(me)
-
-	fmt.Println(weirdLine)
-}
-
 type ShopA struct {
 	books []Book
 }
@@ -50,4 +36,18 @@ type ShopB struct {
 
 func (s ShopB) Sell() Journal {
 	return s.journals[0]
+}
+
+func main() {
+	me := "Jafree"
+
+	var somethingToRead Reader
+
+	shopToVisit := ShopA{}
+
+	somethingToRead = shopToVisit.Sell()
+
+	weirdLine := somethingToRead.Read(me)
+
+	fmt.Println(weirdLine)
 }
