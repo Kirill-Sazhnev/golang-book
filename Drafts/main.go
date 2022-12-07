@@ -2,114 +2,58 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
 )
 
-// Пчела
-type honeyBee struct {
+type item struct {
 	name string
 }
 
-func (hb honeyBee) String() string {
-	return hb.name
+type character struct {
+	name     string
+	leftHand *item
 }
 
-func (hb honeyBee) move() string {
-	switch rand.Intn(2) {
-	case 0:
-		return "жужжит"
-	default:
-		return "летает и веселится"
+func (c *character) pickup(i *item) {
+	if c == nil || i == nil {
+		return
 	}
+	fmt.Printf("%v поднимает %v\n", c.name, i.name)
+	c.leftHand = i
 }
 
-func (hb honeyBee) eat() string {
-	switch rand.Intn(2) {
-	case 0:
-		return "пыльцу"
-	default:
-		return "нектар"
+func (c *character) give(to *character) {
+	if c == nil || to == nil {
+		return
 	}
-}
-
-// Суслик
-type gopher struct {
-	name string
-}
-
-func (g gopher) String() string {
-	return g.name
-}
-
-func (g gopher) move() string {
-	switch rand.Intn(2) {
-	case 0:
-		return "гулят и изучает территорию"
-	default:
-		return "прячется в норку"
+	if c.leftHand == nil {
+		fmt.Printf("%v ничего не может дать\n", c.name)
+		return
 	}
-}
-
-func (g gopher) eat() string {
-	switch rand.Intn(5) {
-	case 0:
-		return "морковку"
-	case 1:
-		return "салат-латук"
-	case 2:
-		return "редиску"
-	case 3:
-		return "кукурузу"
-	default:
-		return "корнеплоды"
+	if to.leftHand != nil {
+		fmt.Printf("%v с занятыми руками\n", to.name)
+		return
 	}
+	to.leftHand = c.leftHand
+	c.leftHand = nil
+	fmt.Printf("%v дает %v %v\n", c.name, to.name, to.leftHand.name)
 }
 
-type animal interface {
-	move() string
-	eat() string
-}
-
-func step(a animal) {
-	switch rand.Intn(2) {
-	case 0:
-		fmt.Printf("%v %v.\n", a, a.move())
-	default:
-		fmt.Printf("%v кушает %v.\n", a, a.eat())
+func (c character) String() string {
+	if c.leftHand == nil {
+		return fmt.Sprintf("%v ничего не несет", c.name)
 	}
+	return fmt.Sprintf("%v несет %v", c.name, c.leftHand.name)
 }
-
-const sunrise, sunset = 8, 18
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
+	arthur := &character{name: "Артур"}
 
-	animals := []animal{
-		honeyBee{name: "Шмель Базз"},
-		gopher{name: "Суслик Го"},
-	}
+	shrubbery := &item{name: "мечь"}
+	arthur.pickup(shrubbery) // Выводит: Артур поднимает кустарник
 
-	var sol, hour int
+	knight := &character{name: "Рыцарь/ю"}
+	arthur.give(knight) // Выводит: Артур дает Рыцарь/ю кустарник
 
-	for {
-		fmt.Printf("%2d:00 ", hour)
-		if hour < sunrise || hour >= sunset {
-			fmt.Println("Животные спят.")
-		} else {
-			i := rand.Intn(len(animals))
-			step(animals[i])
-		}
-
-		time.Sleep(500 * time.Millisecond)
-
-		hour++
-		if hour >= 24 {
-			hour = 0
-			sol++
-			if sol >= 3 {
-				break
-			}
-		}
-	}
+	fmt.Println(arthur) // Выводит: Артур ничего не несет
+	fmt.Println(knight) // Выводит: Рыцарь/ю несет кустарник
 }
