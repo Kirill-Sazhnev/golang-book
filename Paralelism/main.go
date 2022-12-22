@@ -104,3 +104,25 @@ func main() {
 	r.Back()
 	time.Sleep(2 * time.Second)
 }
+
+/*
+
+func worker() {
+	pos := image.Point{X: 10, Y: 10}     // Текущая позиция (изначально [10, 10])
+	direction := image.Point{X: 1, Y: 0} // Текущее направление (изначально [1, 0])
+	next := time.After(time.Second)      // Создаем начальный канал таймера
+	for {
+		select {
+		case <-next: // Ожидает истечение срока таймера
+			pos = pos.Add(direction)
+			fmt.Println("текущая позиция ", pos) // Выводит текущую позицию
+			next = time.After(time.Second)       // Создает другой канал таймера для другого события
+			fmt.Println("!")
+		}
+	}
+}
+
+func main() {
+	worker()
+}
+*/
