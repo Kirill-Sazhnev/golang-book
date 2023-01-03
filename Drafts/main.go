@@ -3,18 +3,44 @@ package main
 import (
 	"image"
 	"log"
+	"sync"
 	"time"
 )
 
 type command int
 
 const (
-	right = command(0)
-	left  = command(1)
-	back  = command(-1)
-	stop  = command(2)
-	start = command(3)
+	right   = command(0)
+	left    = command(1)
+	back    = command(-1)
+	stop    = command(2)
+	start   = command(3)
+	rows    = 5
+	columns = 5
 )
+
+type Cell struct {
+	digit int8
+	empty bool
+}
+
+// Grid является сеткой Судоку
+type Grid [rows][columns]Cell
+
+type MarsGrid struct {
+	mu   sync.Mutex
+	grid Grid
+}
+
+func (g *MarsGrid) Occupy(p image.Point) *Occupier {
+	return nil
+}
+
+// Occupier представляет занятую клетку сетки
+// Может использоваться конкурентно другой сеткой
+type Occupier struct {
+	// Готово
+}
 
 type RoverDriver struct {
 	commandc  chan command

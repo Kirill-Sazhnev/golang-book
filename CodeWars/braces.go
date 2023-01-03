@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func ValidBraces(str string) bool {
 
 	braces := make(map[byte][]int, 3)
@@ -53,11 +51,12 @@ func pair(sign byte) byte {
 	}
 }
 
+/*
 func main() {
 	fmt.Println(ValidBraces("(){}[]"))
 }
 
-/*
+
 
 type braced map[string][]int
 
