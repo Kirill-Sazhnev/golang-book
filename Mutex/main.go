@@ -29,8 +29,11 @@ func main() {
 	}
 
 	go web.VisitLink("4pda.ru")
+	for _, item := range []string{"wiki.ru", "hades.com", "wiki.ru", "hades.com"} {
+		go web.VisitLink(item)
+	}
 	go web.VisitLink("rain.tv")
-	fmt.Println(web.visited)
+	//fmt.Println(web.visited)
 	go web.VisitLink("4pda.ru")
 	go web.VisitLink("rain.tv")
 	fmt.Println(web.visited)
