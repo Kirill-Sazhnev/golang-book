@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type StackInt struct {
 	s []int
@@ -73,24 +75,29 @@ func (s *StackInt) Top() int {
 
 //==========================================================
 
-//Size() function will return the size of the linked list.
+// Size() function will return the size of the linked list.
 func (s *StackLinkedList) Size() int {
 	//Implement your solution here
 
 	return s.size //Return 0 if stack is empty
 }
 
-/* IsEmpty() function will return true is size of the linked list is
-equal to zero or false in all other cases. */
+/*
+	IsEmpty() function will return true is size of the linked list is
+
+equal to zero or false in all other cases.
+*/
 func (s *StackLinkedList) IsEmpty() bool {
 	//Implement your solution here
 
 	return s.size == 0 //Return true if stack is empty
 }
 
-/*First, the Peek() function will check if the stack is empty.
+/*
+First, the Peek() function will check if the stack is empty.
 If not, it will return the peek value of stack i.e., will return the
-head value of the linked list. */
+head value of the linked list.
+*/
 func (s *StackLinkedList) Peek() (int, bool) {
 	//Implement your solution here
 	if s.IsEmpty() {
@@ -100,7 +107,7 @@ func (s *StackLinkedList) Peek() (int, bool) {
 	return s.head.value, true //Return 0,true if stack is empty
 }
 
-//Push() function  will add new value at the start of the linked list.
+// Push() function  will add new value at the start of the linked list.
 func (s *StackLinkedList) Push(value int) {
 	//Implement your solution here
 	s.head = &Node{
@@ -110,8 +117,10 @@ func (s *StackLinkedList) Push(value int) {
 	s.size++
 }
 
-/*In the pop() function, first it will check that the stack is not empty.
-Then it will pop the value from the linked list and return it. */
+/*
+In the pop() function, first it will check that the stack is not empty.
+Then it will pop the value from the linked list and return it.
+*/
 func (s *StackLinkedList) Pop() (int, bool) {
 	//Implement your solution here
 	if s.IsEmpty() {
@@ -320,7 +329,7 @@ func (s *Stack) Push(value rune) {
 }
 
 func (s *Stack) Pop() rune {
-	if s.IsEmpty() == true {
+	if s.IsEmpty() {
 		return ' '
 	}
 	length := len(s.s)
@@ -330,7 +339,7 @@ func (s *Stack) Pop() rune {
 }
 
 func (s *Stack) Top() rune {
-	if s.IsEmpty() == true {
+	if s.IsEmpty() {
 		return ' '
 	}
 	length := len(s.s)
@@ -379,9 +388,175 @@ func Pair(val rune) rune {
 	}
 }
 
+func longestContBalParen(str string, size int) int {
+	//Implement your solution here
+	stk := new(StackInt)
+	stk.Push(-1)
+	length := 0
+	for i := 0; i < size; i++ {
+		if str[i] == '(' {
+			stk.Push(i)
+		} else // string[i] == ')'
+		{
+			stk.Pop()
+			if stk.Length() != 0 {
+				if length < i-stk.Top() {
+					length = i - stk.Top()
+				}
+			} else {
+				stk.Push(i)
+			}
+		}
+	}
+	return length
+}
+
+func findDuplicateParenthesis(expn string, size int) bool {
+
+	stk := new(StackInt)
+	pair := 0
+	for i := 0; i < size; i++ {
+		switch {
+		case expn[i] == '(':
+			stk.Push(i)
+		case expn[i] == ')' && !stk.IsEmpty():
+			stk.Pop()
+			pair++
+			if i-stk.Top() < 3 {
+				return true
+			}
+		}
+
+	}
+
+	if !stk.IsEmpty() || pair > 1 {
+		return true
+	}
+	return false
+}
+
+func printParenthesisNumber(expn string, size int) {
+	//Uncomment the ch variable and use it iterate through the string
+	var ch byte
+	stk := new(StackInt)
+	index := 0
+	output := ""
+	for i := 0; i < size; i++ {
+		ch = expn[i]
+		switch ch {
+		case '(':
+			index++
+			stk.Push(index)
+			output += fmt.Sprintf("%v", index)
+		case ')':
+			output += fmt.Sprintf("%v", stk.Pop())
+		}
+	}
+
+	//use output variable to save and print the output string
+
+	//Implement your solution here
+
+	fmt.Println(output)
+}
+
+func InfixToPostfix(expn string) string {
+
+	//kindly replace the output string with empty string while
+	//implementing the solution
+	output := "No Output"
+	stkS := new(StackInt)
+	input := ""
+	for _, rval := range expn {
+		val := int(rval)
+		switch val {
+		case '(':
+			stkS.Push(val)
+		case '+', '-', '*', '/', '^', '%':
+			for !stkS.IsEmpty() && priority(stkS.Top()) >= priority(val) {
+				input += fmt.Sprintf(" %c", stkS.Pop())
+			}
+			stkS.Push(val)
+			input += " "
+		case ')':
+			for stkS.Top() != '(' {
+				input += fmt.Sprintf(" %c", stkS.Pop())
+			}
+			stkS.Pop()
+		default:
+			input += fmt.Sprintf("%c", val)
+		}
+	}
+	for !stkS.IsEmpty() {
+		input += fmt.Sprintf(" %c", stkS.Pop())
+	}
+
+	if input != "" {
+		output = input
+	}
+	return output
+}
+
+func priority(sign int) int {
+	prt := 0
+	switch sign {
+	case '^':
+		prt = 3
+	case '*', '/', '%':
+		prt = 2
+	case '+', '-':
+		prt = 1
+	}
+	return prt
+}
+
+func InfixToPrefix(expn string) string {
+	//Implement your solution here
+
+	stk := new(StackInt)
+	input := ""
+	output := ""
+
+	for i := len(expn) - 1; i >= 0; i-- {
+		val := int(expn[i])
+		switch val {
+		case ')':
+			stk.Push(val)
+		case '(':
+			for !stk.IsEmpty() && stk.Top() != ')' {
+				input += fmt.Sprintf(" %c", stk.Pop())
+			}
+			stk.Pop()
+
+		case '+', '-', '*', '/', '^', '%':
+			for !stk.IsEmpty() && priority(stk.Top()) >= priority(val) {
+				input += fmt.Sprintf(" %c", stk.Pop())
+			}
+			stk.Push(val)
+			input += " "
+
+		default:
+			input += fmt.Sprintf("%c", val)
+		}
+	}
+
+	for !stk.IsEmpty() {
+		input += fmt.Sprintf("%c ", stk.Pop())
+	}
+
+	if input != "" {
+		for i := len(input) - 1; i >= 0; i-- {
+			output += string(input[i])
+		}
+		return output
+	}
+
+	return " No Output "
+}
+
 func main() {
-	str := "{[({})]}"
-	fmt.Println(IsBalancedParenthesis(str))
+	str := "10+((3))*5/(16-4)"
+	fmt.Println(InfixToPrefix(str))
 
 	/*
 		stack := new(StackLinkedList)
