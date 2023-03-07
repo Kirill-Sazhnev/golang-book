@@ -2,53 +2,104 @@ package main
 
 import "fmt"
 
-const capacity = 5
-
-type Queue struct {
-	size  int
-	data  [capacity]interface{}
-	front int
-	back  int
+type Stack struct {
+	s []int
 }
 
-func (q *Queue) Enqueue(value interface{}) {
-	if q.size >= capacity {
-		return
+func (s *Stack) IsEmpty() bool {
+	length := len(s.s)
+	return length == 0
+}
+
+func (s *Stack) Length() int {
+	length := len(s.s)
+	return length
+}
+
+func (s *Stack) Print() {
+	length := len(s.s)
+	for i := 0; i < length; i++ {
+		fmt.Print(s.s[i], " ")
 	}
-	q.size++
-	q.data[q.back] = value
-	q.back = (q.back + 1) % (capacity - 1)
+	fmt.Println()
 }
 
-func (q *Queue) Dequeue() interface{} {
-	var value interface{}
-	if q.size <= 0 {
+func (s *Stack) Push(value int) {
+	s.s = append(s.s, value)
+}
+
+func (s *Stack) Pop() int {
+	length := len(s.s)
+	res := s.s[length-1]
+	s.s = s.s[:length-1]
+	return res
+}
+
+func (s *Stack) Top() int {
+	length := len(s.s)
+	res := s.s[length-1]
+	return res
+}
+
+type QueueUsingStack struct {
+	stk1 Stack
+	// add more values here if need be
+	size int
+	head int
+	tail int
+}
+
+func (que *QueueUsingStack) Add(value int) {
+	//Implement your solution here
+	que.stk1.Push(value)
+	if que.IsEmpty() {
+		que.head = 0
+		que.tail = 0
+	} else {
+		que.tail++
+	}
+
+	que.size++
+
+}
+
+func (que *QueueUsingStack) Remove() int {
+	//Implement your solution here
+	if que.IsEmpty() {
+		fmt.Println("The queue is empty")
 		return 0
 	}
-	q.size--
-	value = q.data[q.front]
-	q.front = (q.front + 1) % (capacity - 1)
+	value := que.stk1.s[que.head]
+	que.size--
+	que.head++
 	return value
 }
 
-func (q *Queue) IsEmpty() bool {
-	return q.size == 0
+func (que *QueueUsingStack) Length() int {
+	//Implement your solution here
+
+	return que.size
 }
 
-func (q *Queue) Length() int {
-	return q.size
+func (que *QueueUsingStack) IsEmpty() bool {
+	//Implement your solution here
+
+	return que.size == 0
 }
 
-//Testing Code
 func main() {
-	q := new(Queue)
-	q.Enqueue(1)
-	q.Enqueue(2)
-	q.Enqueue(3)
-	q.Enqueue(4)
-	q.Enqueue(5)
-	for !q.IsEmpty() {
-		val, _ := q.Dequeue().(int)
-		fmt.Println(val, " ")
-	}
+	q := new(QueueUsingStack)
+	q.Add(10)
+	q.Add(20)
+	q.Add(30)
+	q.stk1.Print()
+	fmt.Println(q.head)
+	fmt.Println(q.tail)
+
+	fmt.Println(q.IsEmpty())
+	fmt.Println(q.Length())
+	fmt.Println(q.Remove())
+	q.stk1.Print()
+	fmt.Println(q.Remove())
+	fmt.Println(q.Remove())
 }
