@@ -1,4 +1,4 @@
-package main
+package Queue
 
 import "fmt"
 
@@ -123,8 +123,7 @@ func reverseKElementInQueue(que *Queue, k int) {
 	for tempque.Length() > 0 {
 		que.Enqueue(tempque.Dequeue())
 	}
-}
-
+} /*
 func main() {
 	que := new(Queue)
 	que.Enqueue(10)
@@ -137,3 +136,4 @@ func main() {
 	que.Print()
 
 }
+*/
