@@ -93,8 +93,41 @@ func (t *Tree) PrintDepthFirst() {
 	}
 }
 
+func (t *Tree) PrintSpiralTree() {
+	stk := new(Stack)
+	stk2 := new(Stack)
+	stk.Push(t.root)
+
+	for stk.Length() > 0 || stk2.Length() > 0 {
+		for stk.Length() > 0 {
+			node := stk.Pop()
+			fmt.Print(node.value, " ")
+			if node.left != nil {
+				stk2.Push(node.left)
+			}
+			if node.right != nil {
+				stk2.Push(node.right)
+			}
+		}
+		fmt.Print("; ")
+
+		for stk2.Length() > 0 {
+			node := stk2.Pop()
+			fmt.Print(node.value, " ")
+
+			if node.right != nil {
+				stk.Push(node.right)
+			}
+			if node.left != nil {
+				stk.Push(node.left)
+			}
+		}
+		fmt.Print("; ")
+	}
+}
+
 func main() {
 	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	tree := LevelOrderBinaryTree(arr)
-	tree.PrintDepthFirst()
+	tree.PrintSpiralTree()
 }

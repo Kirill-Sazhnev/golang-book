@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	Queue "golang-book/Queue/ReverseQueue"
+	"math"
 )
 
 type Node struct {
@@ -161,8 +162,183 @@ func (t *Tree) PrintLevelOrderLineByLine2() {
 	}
 }
 
+func (t *Tree) NthPreOrder(index int) {
+	var counter int
+	nthPreOrder(t.root, index, &counter)
+}
+
+func nthPreOrder(node *Node, index int, counter *int) {
+	//Implement your solution here
+	if node != nil {
+		*counter++
+		if *counter == index {
+			fmt.Print(node.value, " ")
+			return
+		}
+		nthPreOrder(node.left, index, counter)
+		nthPreOrder(node.right, index, counter)
+	}
+}
+
+func (t *Tree) NthPostOrder(index int) {
+	var counter int
+	nthPostOrder(t.root, index, &counter)
+}
+
+func nthPostOrder(node *Node, index int, counter *int) {
+	//Implement your solution here
+	if node != nil {
+
+		nthPostOrder(node.left, index, counter)
+		nthPostOrder(node.right, index, counter)
+		*counter++
+		if *counter == index {
+			fmt.Print(node.value, " ")
+			return
+		}
+
+	}
+}
+
+func (t *Tree) NthInOrder(index int) {
+	var counter int
+	nthInOrder(t.root, index, &counter)
+}
+
+func nthInOrder(node *Node, index int, counter *int) {
+	//Implement your solution here
+
+	if node != nil {
+
+		nthInOrder(node.left, index, counter)
+		*counter++
+		if *counter == index {
+			fmt.Print(node.value, " ")
+			return
+		}
+		nthInOrder(node.right, index, counter)
+
+	}
+}
+
+func (t *Tree) NumNodes() int {
+	return numNodes(t.root)
+}
+
+func numNodesQue(curr *Node) int {
+	if curr == nil {
+		return 0
+	}
+	que := new(Queue.Queue)
+	que.Enqueue(curr)
+	counter := 0
+	for !que.IsEmpty() {
+		curr = que.Dequeue().(*Node)
+		counter++
+		if curr.right != nil {
+			que.Enqueue(curr.right)
+		}
+		if curr.left != nil {
+			que.Enqueue(curr.left)
+		}
+	}
+	return counter //Kindly change the return value as per your needs
+}
+
+func numNodes(curr *Node) int {
+	if curr == nil {
+		return 0
+	}
+
+	return 1 + numNodes(curr.left) + numNodes(curr.right) //Kindly change the return value as per your needs
+}
+
+func (t *Tree) SumAllBT() int {
+	return sumAllBT(t.root)
+}
+
+func sumAllBT(curr *Node) int {
+	if curr == nil {
+		return 0
+	}
+
+	return curr.value + sumAllBT(curr.left) + sumAllBT(curr.right) //Kindly change the return value as per need
+}
+
+func (t *Tree) NumLeafNodes() int {
+	return numLeafNodes(t.root)
+}
+
+func numLeafNodes(curr *Node) int {
+	if curr == nil {
+		return 0
+	}
+	if curr.left == nil && curr.right == nil {
+		return 1
+	}
+	return numLeafNodes(curr.right) + numLeafNodes(curr.left) //Kindly change the return value as per needs
+}
+
+func (t *Tree) NumFullNodesBT() int {
+	return numFullNodesBT(t.root)
+}
+
+func numFullNodesBT(curr *Node) int {
+
+	if curr == nil {
+		return 0
+	}
+
+	var count int
+
+	if curr.left != nil && curr.right != nil {
+		count++
+	}
+
+	return count + numFullNodesBT(curr.left) + numFullNodesBT(curr.right)
+}
+
+func (t *Tree) SearchBT(value int) bool {
+	return searchBT(t.root, value)
+}
+
+func searchBT(root *Node, value int) bool {
+	if root == nil {
+		return false
+	}
+
+	if root.value == value {
+		return true
+	}
+
+	return searchBT(root.left, value) || searchBT(root.right, value)
+}
+
+func (t *Tree) FindMaxBT() int {
+	return findMaxBT(t.root)
+}
+
+func findMaxBT(curr *Node) int {
+	if curr == nil {
+		return math.MinInt32
+	}
+
+	max := findMaxBT(curr.left)
+
+	if curr.value > max {
+		max = curr.value
+	}
+	maxRight := findMaxBT(curr.right)
+	if maxRight > max {
+		max = maxRight
+	}
+
+	return max
+}
+
 func main() {
-	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 	tree := LevelOrderBinaryTree(arr)
-	tree.PrintLevelOrderLineByLine2()
+	fmt.Println(tree.FindMaxBT())
+
 }
