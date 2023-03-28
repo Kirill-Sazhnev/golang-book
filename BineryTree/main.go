@@ -1,4 +1,4 @@
-package main
+package btree
 
 import (
 	"fmt"
@@ -336,9 +336,93 @@ func findMaxBT(curr *Node) int {
 	return max
 }
 
+func (t *Tree) TreeDepth() int {
+	return treeDepth(t.root)
+}
+
+func treeDepth(root *Node) int {
+	if root == nil {
+		return 0
+	}
+
+	leftE := treeDepth(root.left)
+	rightE := treeDepth(root.right)
+
+	if root.left != nil && leftE >= rightE {
+		return 1 + leftE
+	}
+
+	if root.right != nil && rightE >= leftE {
+		return 1 + rightE
+	}
+
+	return 0
+}
+
+func (t *Tree) IsEqual(t2 *Tree) bool {
+	return isEqual(t.root, t2.root)
+}
+
+func isEqual(node1 *Node, node2 *Node) bool {
+	if node1 == nil && node2 == nil {
+		return true
+	}
+	if node1 == nil || node2 == nil {
+		return false
+	}
+
+	return (node1.value == node2.value && isEqual(node1.left, node2.left) == isEqual(node1.right, node2.right))
+}
+
+func (t *Tree) CopyTree() *Tree {
+	Tree2 := new(Tree)
+	Tree2.root = copyTree(t.root)
+	return Tree2
+}
+
+func copyTree(curr *Node) *Node {
+
+	if curr == nil {
+		return nil
+	}
+
+	newNode := &Node{
+		value: curr.value,
+		left:  copyTree(curr.left),
+		right: copyTree(curr.right),
+	}
+
+	return newNode
+}
+
+func (t *Tree) CopyMirrorTree() *Tree {
+	tree := new(Tree)
+	tree.root = copyMirrorTree(t.root)
+	return tree
+}
+
+func copyMirrorTree(curr *Node) *Node {
+	if curr == nil {
+		return nil
+	}
+
+	newNode := &Node{
+		value: curr.value,
+		left:  copyMirrorTree(curr.right),
+		right: copyMirrorTree(curr.left),
+	}
+
+	return newNode
+}
+
+func (t *Tree) Free() {
+	var emptyNode *Node
+	t.root = emptyNode
+}
+
 func main() {
-	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
 	tree := LevelOrderBinaryTree(arr)
-	fmt.Println(tree.FindMaxBT())
+	fmt.Println(tree.TreeDepth())
 
 }
