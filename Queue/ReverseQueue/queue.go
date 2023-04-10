@@ -1,4 +1,5 @@
-package Queue
+// some explanantion for the package
+package queue
 
 import "fmt"
 

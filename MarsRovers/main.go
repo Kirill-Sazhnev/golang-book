@@ -1,3 +1,4 @@
+// bla bla bla test
 package main
 
 import (
@@ -366,5 +367,5 @@ func main() {
 	for _, life := range earth.Data {
 		fmt.Printf("%+v\n", life)
 	}
-
+	time.Sleep(15 * time.Second)
 }

@@ -2,7 +2,7 @@ package btree
 
 import (
 	"fmt"
-	Queue "golang-book/Queue/ReverseQueue"
+	Que "golang-book/Queue/ReverseQueue"
 	"math"
 )
 
@@ -84,7 +84,7 @@ func printInOrder(n *Node) {
 }
 
 func (t *Tree) PrintBreadthFirst() {
-	que := new(Queue.Queue)
+	que := new(Que.Queue)
 	que.Enqueue(t.root)
 	for !que.IsEmpty() {
 		node := que.Dequeue().(*Node)
@@ -102,8 +102,8 @@ func (t *Tree) PrintBreadthFirst() {
 
 func (t *Tree) PrintLevelOrderLineByLine() {
 
-	que := new(Queue.Queue)
-	que2 := new(Queue.Queue)
+	que := new(Que.Queue)
+	que2 := new(Que.Queue)
 
 	que.Enqueue(t.root)
 
@@ -141,7 +141,7 @@ func (t *Tree) PrintLevelOrderLineByLine() {
 }
 
 func (t *Tree) PrintLevelOrderLineByLine2() {
-	que := new(Queue.Queue)
+	que := new(Que.Queue)
 	que.Enqueue(t.root)
 
 	for !que.IsEmpty() {
@@ -229,7 +229,7 @@ func numNodesQue(curr *Node) int {
 	if curr == nil {
 		return 0
 	}
-	que := new(Queue.Queue)
+	que := new(Que.Queue)
 	que.Enqueue(curr)
 	counter := 0
 	for !que.IsEmpty() {
