@@ -2,12 +2,14 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"image"
 	"log"
 	"math/rand"
 	"os"
 	"os/exec"
+	"runtime/pprof"
 	"sync"
 	"time"
 )
@@ -315,7 +317,21 @@ func cls() {
 	cmd.Run()
 }
 
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+
 func main() {
+
+	flag.Parse()
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
+
 	mars := scanPlanet(7, 9)
 	earth := &EarthComs{
 		Data: []Message{},
@@ -368,4 +384,5 @@ func main() {
 		fmt.Printf("%+v\n", life)
 	}
 	time.Sleep(15 * time.Second)
+
 }

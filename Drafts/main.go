@@ -1,34 +1,55 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
-func insertionSort(sl []int) []int {
+func Revrot(s string, n int) string {
+	if n < 1 {
+		return ""
+	}
+	subStrgs := make([]string, 0)
 
-	for i := 1; i < len(sl); i++ {
-		tempV := sl[i]
-		tempI := i
-		for j := i - 1; j >= 0 && tempV < sl[j]; j-- {
-			sl[tempI] = sl[j]
-			tempI--
-		}
-		if tempI != i {
-			sl[tempI] = tempV
+	for i := 0; i <= len(s)-n; i += n {
+		subStrgs = append(subStrgs, s[i:i+n])
+	}
+
+	for i, subStr := range subStrgs {
+		if cubeSum(subStr)%2 == 0 {
+			subStrgs[i] = reverse(subStr)
+		} else {
+			bytes := []byte(subStrgs[i])
+			bytes = append(bytes[1:], bytes[0])
+			subStrgs[i] = string(bytes)
 		}
 	}
-	return sl
+	return strings.Join(subStrgs, "")
 }
 
-func bubbleSort(sl []int) []int {
+func cube(n int) int {
+	return n * n * n
+}
 
-	for i := 1; i < len(sl); i++ {
-		for j := i; j > 0 && sl[j-1] > sl[j]; j-- {
-			sl[j], sl[j-1] = sl[j-1], sl[j]
-		}
+func cubeSum(nums string) int {
+	sum := 0
+	for _, val := range nums {
+		num, _ := strconv.Atoi(string(val))
+		sum += cube(num)
 	}
-	return sl
+	return sum
+}
+
+func reverse(s string) string {
+	ln := len(s)
+	str := []byte(s)
+	for i := 0; i < ln/2; i++ {
+		str[i], str[ln-i-1] = str[ln-i-1], str[i]
+	}
+	return string(str)
 }
 
 func main() {
-	sl := []int{4, 5, 2, 1, 3, 7, 6}
-	fmt.Println(bubbleSort(sl))
+	fmt.Println(Revrot("123456987653", 6), "234561356789")
 }

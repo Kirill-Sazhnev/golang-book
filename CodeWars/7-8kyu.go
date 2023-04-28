@@ -103,6 +103,25 @@ func Cats(start, finish int) int {
 	return int(jumps)
 }
 
+func Game(frank, sam, tom [4]int) bool { // 7 kyu
+	samCopy := sam[:]
+	tomCopy := tom[:]
+	winCnt := 0
+
+	for _, card := range frank {
+
+		if card > samCopy[0] && card > tomCopy[0] {
+			winCnt++
+			samCopy = samCopy[1:]
+			tomCopy = tomCopy[1:]
+		} else {
+			samCopy = samCopy[:len(samCopy)-1]
+			tomCopy = tomCopy[:len(tomCopy)-1]
+		}
+	}
+	return winCnt > 1
+}
+
 /*
 func main() {
 	fmt.Println(Cats(1, 5))
