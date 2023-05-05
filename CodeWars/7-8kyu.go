@@ -122,6 +122,13 @@ func Game(frank, sam, tom [4]int) bool { // 7 kyu
 	return winCnt > 1
 }
 
+func solution(str, ending string) bool { //7 kyu
+	if len(str) > len(ending) {
+		return str[len(str)-len(ending):] == ending
+	}
+	return false
+}
+
 /*
 func main() {
 	fmt.Println(Cats(1, 5))

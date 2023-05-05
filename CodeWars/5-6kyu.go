@@ -110,6 +110,79 @@ func reverse(s string) string {
 	return string(str)
 }
 
+func Millipede(words []string) bool { // 6kyu
+	for i, word := range words {
+
+		wordSl := reSlice(i, words)
+
+		if MPrecur(word, wordSl) {
+			return true
+		}
+	}
+	return false
+}
+
+func MPrecur(word string, words []string) bool {
+	if len(words) == 1 && llo(word) == flo(words[0]) {
+		return true
+	}
+
+	for i, current := range words {
+
+		if llo(word) == flo(current) {
+			wordSl := reSlice(i, words)
+
+			if MPrecur(current, wordSl) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func reSlice(i int, words []string) []string {
+	wordSl := make([]string, len(words))
+	copy(wordSl, words)
+	return append(wordSl[:i], wordSl[i+1:]...)
+}
+
+func flo(s string) byte {
+	return s[0]
+}
+
+func llo(s string) byte {
+	return s[len(s)-1]
+}
+
+func DirReduc(arr []string) []string { // 5kyu
+	for i := 0; i < len(arr)-1; i++ {
+		if isOpposite(arr[i], arr[i+1]) {
+			arr = Slice(arr, i)
+			i = -1
+		}
+	}
+	return arr
+}
+
+func isOpposite(dir1, dir2 string) bool {
+	switch dir1 {
+	case "NORTH":
+		return dir2 == "SOUTH"
+	case "SOUTH":
+		return dir2 == "NORTH"
+	case "WEST":
+		return dir2 == "EAST"
+	case "EAST":
+		return dir2 == "WEST"
+	default:
+		panic("Unknown direction")
+	}
+}
+
+func Slice(slice []string, i int) []string {
+	return append(slice[:i], slice[i+2:]...)
+}
+
 func main() {
 	fmt.Println(FindNb(100))
 }
