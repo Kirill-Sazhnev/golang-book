@@ -183,6 +183,106 @@ func Slice(slice []string, i int) []string {
 	return append(slice[:i], slice[i+2:]...)
 }
 
+func PrimeFactors(n int) string { // 5kyu
+
+	primes := make([]int, 0)
+	for i := 2; n >= i; i++ {
+		if n%i == 0 {
+			primes = append(primes, i)
+			n = n / i
+			i = 1
+		}
+	}
+
+	result := ""
+	powerCntr := 0
+	for i := 0; i < len(primes); i++ {
+		switch {
+		case i > 0 && primes[i-1] == primes[i] && powerCntr == 0:
+			result += "**"
+			powerCntr = 2
+		case powerCntr > 0 && primes[i-1] == primes[i]:
+			powerCntr++
+		case powerCntr > 0:
+			result += strconv.Itoa(powerCntr)
+			powerCntr = 0
+			fallthrough
+		case i > 0 && powerCntr == 0:
+			result += ")"
+			fallthrough
+		default:
+			result += "(" + strconv.Itoa(primes[i])
+		}
+	}
+	if powerCntr > 0 {
+		result += strconv.Itoa(powerCntr) + ")"
+	} else {
+		result += ")"
+	}
+	return result
+}
+
+func Tribonacci(signature [3]float64, n int) []float64 { // 6 kyu
+	return TribonacciRecur(signature[:], n)
+}
+
+func TribonacciRecur(slice []float64, n int) []float64 {
+	if n <= 3 {
+		initialSl := make([]float64, n)
+		for i := 0; i < n; i++ {
+			initialSl[i] = slice[i]
+		}
+		return initialSl
+	}
+
+	newSl := TribonacciRecur(slice, n-1)
+	ln := len(newSl)
+	return append(newSl, newSl[ln-1]+newSl[ln-2]+newSl[ln-3])
+}
+
+func Crossover(ns []int, xs []int, ys []int) ([]int, []int) { // 6 kyu
+	// Your code here
+	isCross := 1
+	newXs, newYs := make([]int, len(xs)), make([]int, len(ys))
+	for i := range xs {
+		if crossOver(ns, i, &isCross) {
+			newXs[i], newYs[i] = ys[i], xs[i]
+		} else {
+			newXs[i], newYs[i] = xs[i], ys[i]
+		}
+	}
+	return newXs, newYs
+}
+
+func crossOver(ns []int, ix int, isCross *int) bool {
+	for _, val := range ns {
+		if val == ix {
+			*isCross += 1
+			break
+		}
+	}
+	return *isCross%2 == 0
+}
+
+func MultiplicationTable(size int) [][]int { // 6 kyu
+	table := make([][]int, size)
+	for i := 1; i <= size; i++ {
+		newRow := make([]int, size)
+		for j := 1; j <= size; j++ {
+			newRow[j-1] = i * j
+		}
+		table[i-1] = newRow
+	}
+	return table
+}
+
+func HumanReadableTime(seconds int) string { // 5 kyu
+	hours := seconds / 3600
+	mins := seconds % 3600 / 60
+	secs := (seconds % 3600) % 60
+	return fmt.Sprintf("%02d:%02d:%02d", hours, mins, secs)
+}
+
 func main() {
 	fmt.Println(FindNb(100))
 }
