@@ -1,21 +1,45 @@
-package kata
+package main
 
-func FindOdd(seq []int) int { // 6 kyu
-	// your code here
-	nums := make(map[int]int)
-	for i := 0; i < len(seq); i++ {
-		if _, ok := nums[seq[i]]; ok {
-			continue
-		}
-		nums[seq[i]]++
-		for j := i + 1; j < len(seq); j++ {
-			if seq[i] == seq[j] {
-				nums[seq[i]]++
+import (
+	"fmt"
+)
+
+func Solution(sl []int) int { // 4 kyu
+
+	ar := make([]int, len(sl))
+	copy(ar, sl)
+	cntr := 0
+	i, j := len(ar)-2, len(ar)-1
+
+	for cntr != len(ar)-1 {
+		switch {
+		case ar[i] > ar[j]:
+			if ar[i]%ar[j] == 0 {
+				ar[i] = ar[j]
+			} else {
+				ar[i] %= ar[j]
 			}
-		}
-		if nums[seq[i]]%2 != 0 {
-			return seq[i]
+			cntr = 0
+		case ar[j] > ar[i]:
+			if ar[j]%ar[i] == 0 {
+				ar[j] = ar[i]
+			} else {
+				ar[j] %= ar[i]
+			}
+			cntr = 0
+		default:
+			cntr++
+			if i == 0 {
+				i = len(ar) - 1
+			}
+			i--
+			j = i + 1
 		}
 	}
-	return -1
+	return ar[0] * len(ar)
+}
+
+func main() {
+	arr := []int{6, 9, 21}
+	fmt.Println(Solution(arr))
 }
