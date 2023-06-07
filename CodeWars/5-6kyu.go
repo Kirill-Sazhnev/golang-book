@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -281,6 +283,152 @@ func HumanReadableTime(seconds int) string { // 5 kyu
 	mins := seconds % 3600 / 60
 	secs := (seconds % 3600) % 60
 	return fmt.Sprintf("%02d:%02d:%02d", hours, mins, secs)
+}
+
+func CountCheckerboard(width, height, resolution uint64) uint64 { //6 kyu
+	var totalBlck uint64
+	SqPerRow := width / resolution
+	SqPerColumn := height / resolution
+	if width >= resolution {
+		var blckSquares uint64
+		for i := resolution; i <= height; i += resolution {
+			if (i/resolution)%2 == 0 {
+				blckSquares += (SqPerRow + 1) / 2
+			} else {
+				blckSquares += SqPerRow / 2
+			}
+		}
+		totalBlck = blckSquares * resolution * resolution
+	}
+
+	remainderRow := width % resolution
+	remainderColumn := height % resolution
+
+	for i := resolution; i <= height; i += resolution {
+		if SqPerRow%2 != 0 {
+			if (i/resolution)%2 != 0 {
+				totalBlck += remainderRow * resolution
+			}
+		} else {
+			if (i/resolution)%2 == 0 {
+				totalBlck += remainderRow * resolution
+			}
+		}
+	}
+	for i := resolution; i <= width; i += resolution {
+		if SqPerColumn%2 != 0 {
+			if (i/resolution)%2 != 0 {
+				totalBlck += remainderColumn * resolution
+			}
+		} else {
+			if (i/resolution)%2 == 0 {
+				totalBlck += remainderColumn * resolution
+			}
+		}
+	}
+	if SqPerRow%2 == 0 && SqPerColumn%2 != 0 || SqPerRow%2 != 0 && SqPerColumn%2 == 0 {
+		totalBlck += remainderRow * remainderColumn
+	}
+	return totalBlck
+}
+
+func TwoSum(numbers []int, target int) [2]int { // 6 kyu
+	for i := 0; i < len(numbers); i++ {
+		for j := i + 1; j < len(numbers); j++ {
+			if numbers[i]+numbers[j] == target {
+				return [2]int{i, j}
+			}
+		}
+	}
+	return [2]int{}
+}
+
+func alphanumeric1(str string) bool { // 5 kyu
+	valid := regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+	return valid.MatchString(str)
+}
+
+func alphanumeric(str string) bool {
+	for i := 0; i < len(str); i++ {
+		fmt.Print(str[i], " ")
+		switch {
+		case str[i] < 48:
+			return false
+		case 57 < str[i] && str[i] < 65:
+			return false
+		case 90 < str[i] && str[i] < 97:
+			return false
+		case 122 < str[i]:
+			return false
+		}
+	}
+
+	return len(str) > 0
+}
+
+func RectIntoRects(l, w int) []string { // 5 kyu
+	if l < w {
+		l, w = w, l
+	}
+
+	sl := make([]int, 0)
+	strSl := make([]string, 0)
+
+	for i, j := l, w; i > 0 && j > 0; {
+		i -= j
+		sl = append(sl, j)
+		if i < j {
+			i, j = j, i
+		}
+	}
+
+	for i := 0; i < len(sl)-1; i++ {
+		for j := i + 1; j < len(sl); j++ {
+			if sl[i] == sl[j] {
+				strSl = append(strSl, fmt.Sprintf("(%v*%v)", sl[i]*(j-i+1), sl[i]))
+			} else {
+				strSl = append(strSl, fmt.Sprintf("(%v*%v)", sl[i]*(j-i)+sl[j], sl[i]))
+				break
+			}
+		}
+	}
+	return strSl
+}
+
+func FindDupsMiss(arr []int) (int, []int) { // 6 kyu
+	sort.Ints(arr)
+	dupSl := make([]int, 0)
+	var miss int
+	for i := 1; i < len(arr); i++ {
+		switch {
+		case arr[i] == arr[i-1] && arr[i] != pop(dupSl):
+			dupSl = append(dupSl, arr[i])
+		case arr[i]-arr[i-1] > 1:
+			miss = arr[i] - 1
+		}
+	}
+	return miss, dupSl
+}
+
+func pop(sl []int) int {
+	if len(sl) > 0 {
+		return sl[len(sl)-1]
+	}
+	return 0
+}
+
+func Collatz(n int) string { // 6 kyu
+	var res string = fmt.Sprintf("%v", n)
+	for n != 1 {
+		switch {
+		case n%2 == 0:
+			n /= 2
+		case n%2 != 0:
+			n = n*3 + 1
+		}
+		res += fmt.Sprintf("->%v", n)
+	}
+	return res
 }
 
 func main() {
