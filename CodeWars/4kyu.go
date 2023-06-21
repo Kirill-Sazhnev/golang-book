@@ -143,3 +143,46 @@ func stringTime(frmt, res string, time map[string]int64) string {
 	delete(time, frmt)
 	return res
 }
+
+func TraverseTCPStates(events []string) string { //4 kyu
+	curState := "CLOSED"
+	eventMap := map[string]map[string]string{
+		"APP_ACTIVE_OPEN": {"CLOSED": "SYN_SENT"},
+		"APP_CLOSE": {
+			"ESTABLISHED": "FIN_WAIT_1",
+			"CLOSE_WAIT":  "LAST_ACK",
+			"SYN_RCVD":    "FIN_WAIT_1",
+			"SYN_SENT":    "CLOSED",
+			"LISTEN":      "CLOSED",
+		},
+		"APP_PASSIVE_OPEN": {"CLOSED": "LISTEN"},
+		"APP_SEND":         {"LISTEN": "SYN_SENT"},
+		"APP_TIMEOUT":      {"TIME_WAIT": "CLOSED"},
+		"RCV_ACK": {
+			"FIN_WAIT_1": "FIN_WAIT_2",
+			"SYN_RCVD":   "ESTABLISHED",
+			"LAST_ACK":   "CLOSED",
+			"CLOSING":    "TIME_WAIT",
+		},
+		"RCV_FIN": {
+			"ESTABLISHED": "CLOSE_WAIT",
+			"FIN_WAIT_1":  "CLOSING",
+			"FIN_WAIT_2":  "TIME_WAIT",
+		},
+		"RCV_FIN_ACK": {"FIN_WAIT_1": "TIME_WAIT"},
+		"RCV_SYN": {
+			"SYN_SENT": "SYN_RCVD",
+			"LISTEN":   "SYN_RCVD",
+		},
+		"RCV_SYN_ACK": {"SYN_SENT": "ESTABLISHED"},
+	}
+
+	for _, event := range events {
+		if newState, ok := eventMap[event][curState]; ok {
+			curState = newState
+		} else {
+			return "ERROR"
+		}
+	}
+	return curState
+}

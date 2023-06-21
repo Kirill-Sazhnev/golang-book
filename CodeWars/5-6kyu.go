@@ -431,6 +431,42 @@ func Collatz(n int) string { // 6 kyu
 	return res
 }
 
+func Chaser(speed, time int) int { // 6 kyu
+	res := speed * time
+	for i := 1; i <= time; i++ {
+		sum := (i - 1) * speed
+		curSpeed := speed
+		for j := i; j <= time; j += 2 {
+			sum += curSpeed * 2
+			if j < time {
+				curSpeed--
+				sum += curSpeed
+			}
+		}
+		if sum > res {
+			res = sum
+		}
+	}
+	return res
+}
+
+func PrimeFactors1(n int) (res []int) { // 6 kyu
+	var factors []int
+	rem := n
+	for i := 2; i <= rem/i; i++ {
+		if rem%i == 0 {
+			factors = append(factors, i)
+			rem = rem / i
+			i = 1
+		}
+	}
+	if rem > 1 {
+		factors = append(factors, rem)
+	}
+
+	return factors
+}
+
 func main() {
 	fmt.Println(FindNb(100))
 }

@@ -210,7 +210,7 @@ func curse(player *player, points []string) []string {
 }
 
 func charge(player *player, points []string) []string {
-	slowPrint("\nYou charge forward boldly but the thing is you are healer and melee hit chance is ridiculously low. MISS! \n")
+	slowPrint("\nYou charge forward boldly but the thing is you are healer and melee hit chance is ridiculously low.\n")
 	slowPrint("MISS!\n")
 	slowPrint(fmt.Sprintf("What's your next move %s?\n", player.name))
 	return remove(points, "Charge forward and scream out loud: \"Gde BLYAT' vse?\"")

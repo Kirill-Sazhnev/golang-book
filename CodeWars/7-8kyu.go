@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"sort"
 	"strconv"
 )
 
@@ -127,6 +128,12 @@ func solution(str, ending string) bool { //7 kyu
 		return str[len(str)-len(ending):] == ending
 	}
 	return false
+}
+
+func IsTriangle(a, b, c int) bool { // 7 kyu
+	edges := []int{a, b, c}
+	sort.Ints(edges)
+	return edges[2] < edges[1]+edges[0]
 }
 
 /*
