@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 func Snail(snaipMap [][]int) (snail []int) { // 4 kyu
 	if len(snaipMap) == 0 {
@@ -185,4 +188,38 @@ func TraverseTCPStates(events []string) string { //4 kyu
 		}
 	}
 	return curState
+}
+
+func NextBigger(n int) int { // 4 kyu
+
+	nStr := strconv.Itoa(n)
+	var res string
+	numbers := make([]int, 0)
+
+	for i := len(nStr) - 1; i > 0 && len(nStr) > 1; i-- {
+		left, _ := strconv.Atoi(string(nStr[i-1]))
+		right, _ := strconv.Atoi(string(nStr[i]))
+		numbers = append(numbers, right)
+
+		if left < right {
+			res = nStr[:i-1] + nextNum(numbers, left)
+			resN, _ := strconv.Atoi(res)
+			return resN
+		}
+
+	}
+	return -1
+}
+
+func nextNum(arr []int, num int) string {
+	var numStr string
+	for _, val := range arr {
+		if val > num {
+			numStr = strconv.Itoa(val) + numStr + strconv.Itoa(num)
+			num = arr[(len(arr) - 1)]
+			continue
+		}
+		numStr += strconv.Itoa(val)
+	}
+	return numStr
 }

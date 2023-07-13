@@ -467,8 +467,61 @@ func PrimeFactors1(n int) (res []int) { // 6 kyu
 	return factors
 }
 
-func main() {
-	fmt.Println(FindNb(100))
+func FindEvenIndex(arr []int) int { //6 kyu
+	for ix, _ := range arr {
+		if sum(arr[:ix]) == sum(arr[ix+1:]) {
+			return ix
+		}
+	}
+	return -1
+}
+
+func sum(arr []int) int {
+	sum := 0
+	for _, val := range arr {
+		sum += val
+	}
+	return sum
+}
+
+func FindOutlier(integers []int) int { //6 kyu
+	even, odd := 0, 0
+	evenCntr, oddCntr := 0, 0
+	for _, n := range integers {
+		if n%2 == 0 {
+			even = n
+			evenCntr++
+		} else {
+			odd = n
+			oddCntr++
+		}
+	}
+
+	if evenCntr > oddCntr {
+		return odd
+	} else {
+		return even
+	}
+}
+
+func FindMissingNumber(seq []int) int { // 5 kyu
+	sort.Ints(seq)
+	temp, step := 0, 0
+	for i := 1; i < len(seq); i++ {
+		step = seq[i] - seq[i-1]
+		if temp == step {
+			break
+		} else {
+			temp = step
+		}
+	}
+
+	for i := 1; i < len(seq); i++ {
+		if seq[i-1]+step != seq[i] {
+			return seq[i-1] + step
+		}
+	}
+	return 1
 }
 
 // ([]int{1, 2, 0, 1, 0, 1, 0, 3, 0, 1}) // returns []int{ 1, 2, 1, 1, 3, 1, 0, 0, 0, 0 }

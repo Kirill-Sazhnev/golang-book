@@ -136,6 +136,22 @@ func IsTriangle(a, b, c int) bool { // 7 kyu
 	return edges[2] < edges[1]+edges[0]
 }
 
+func Smaller(arr []int) []int { //7 kyu
+	// Your code here
+	res := make([]int, len(arr))
+	count := 0
+	for i, val := range arr {
+		for j := i + 1; j < len(arr); j++ {
+			if val > arr[j] {
+				count++
+			}
+		}
+		res[i] = count
+		count = 0
+	}
+	return res
+}
+
 /*
 func main() {
 	fmt.Println(Cats(1, 5))
