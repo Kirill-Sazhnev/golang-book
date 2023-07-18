@@ -1,0 +1,16 @@
+﻿goos: windows
+goarch: amd64
+pkg: golang-book/testing
+cpu: AMD Ryzen 7 5700U with Radeon Graphics         
+BenchmarkFooer-16    	35610843	        32.94 ns/op
+BenchmarkFooer-16    	39040767	        33.07 ns/op
+BenchmarkFooer-16    	36880540	        32.31 ns/op
+BenchmarkFooer-16    	36008922	        32.63 ns/op
+BenchmarkFooer-16    	37660291	        32.59 ns/op
+BenchmarkFooer-16    	37694834	        27.98 ns/op
+BenchmarkFooer-16    	45846848	        23.83 ns/op
+BenchmarkFooer-16    	71655907	        23.73 ns/op
+BenchmarkFooer-16    	55430323	        24.58 ns/op
+BenchmarkFooer-16    	45295666	        24.34 ns/op
+PASS
+ok  	golang-book/testing	15.010s

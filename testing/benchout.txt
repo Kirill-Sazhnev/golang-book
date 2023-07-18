@@ -1,0 +1,6 @@
+﻿goarch: amd64
+pkg: golang-book/testing
+cpu: AMD Ryzen 7 5700U with Radeon Graphics         
+         тФВ firstrun.txt тФВ        secondrurun.txt         тФВ
+         тФВ    sec/op    тФВ    sec/op     vs base          тФВ
+Fooer-16   33.73n ┬▒ 28%   30.14n ┬▒ 21%  ~ (p=0.089 n=10)
