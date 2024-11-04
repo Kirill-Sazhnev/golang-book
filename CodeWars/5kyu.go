@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"regexp"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 func MoveZeros(arr []int) []int { //5kyu
@@ -120,4 +122,23 @@ func FindMissingNumber(seq []int) int { // 5 kyu
 		}
 	}
 	return 1
+}
+
+func RGB(r, g, b int) string {
+	r = int(math.Min(math.Max(float64(r), 0), 255))
+	red := strconv.FormatInt(int64(r), 16)
+	if len(red) == 1 {
+		red = "0" + red
+	}
+	g = int(math.Min(math.Max(float64(g), 0), 255))
+	green := strconv.FormatInt(int64(g), 16)
+	if len(green) == 1 {
+		green = "0" + green
+	}
+	b = int(math.Min(math.Max(float64(b), 0), 255))
+	blue := strconv.FormatInt(int64(b), 16)
+	if len(blue) == 1 {
+		blue = "0" + blue
+	}
+	return strings.ToUpper(red + green + blue)
 }
