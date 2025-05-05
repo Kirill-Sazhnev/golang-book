@@ -11,6 +11,39 @@ func main() {
 	fmt.Println(kSmallestPairs(arr, arr2, 10))
 }
 
+func kthSmallestElement(matrix [][]int, k int) int {
+	h := &MinHeap{}
+	heap.Init(h)
+	totalLen := 0
+	for i, column := range matrix {
+		heap.Push(h, Set{
+			n1: column[0],
+			n2: 0,
+			n3: i,
+		})
+		totalLen += len(column)
+	}
+
+	if totalLen > k {
+		totalLen = k
+	}
+
+	var elem Set
+	for i := 0; i < totalLen; i++ {
+		elem = heap.Pop(h).(Set)
+		next := elem.n2 + 1
+		if next >= len(matrix[elem.n3]) {
+			continue
+		}
+		heap.Push(h, Set{
+			n1: matrix[elem.n3][next],
+			n2: next,
+			n3: elem.n3,
+		})
+	}
+	return elem.n1
+}
+
 func kSmallestPairs(list1 []int, list2 []int, k int) [][]int {
 	totalLen := len(list1) * len(list2)
 	result := make([][]int, 0, totalLen)
