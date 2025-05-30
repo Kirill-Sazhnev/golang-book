@@ -1,13 +1,111 @@
 package main
 
+import (
+	"fmt"
+	"strconv"
+)
+
 func main() {
-	arr := [][]string{{"E"}, {"C"}, {"E"}, {"G"}, {"D"}}
-	word := "ECEGD"
-	if wordSearch(arr, word) {
-		println("Found")
-	} else {
-		println("Not Found")
+	fmt.Println(restoreIpAddresses(
+		"201023"))
+}
+
+func restoreIpAddresses(s string) []string {
+	res := make([]string, 0, len(s))
+	for i := 1; i <= 3; i++ {
+		res = buildAddress(s, "", 0, i, 0, res)
 	}
+	return res
+}
+
+func buildAddress(s, adr string, ix, subIx, depth int, res []string) []string {
+	if len(adr)-3 > len(s) || ix+subIx > len(s) || depth > 3 {
+		return res
+	}
+	if subIx != 1 && s[ix] == '0' {
+		return res
+	}
+	if ix != 0 {
+		adr += "."
+	}
+	newSub := s[ix : ix+subIx]
+	number, _ := strconv.Atoi(newSub)
+	if number > 255 {
+		return res
+	}
+	adr += newSub
+	if len(adr)-3 == len(s) {
+		return append(res, adr)
+	}
+	for i := 1; i <= 3; i++ {
+		res = buildAddress(s, adr, ix+subIx, i, depth+1, res)
+	}
+	return res
+}
+
+func restoreIpAddressesV2(s string) []string {
+	res := make([]string, 0)
+	possibleDepths := make([][]int, 0, len(s))
+	for i := 0; i < 81; i++ {
+		d := depths(i, len(s))
+		if d == nil {
+			continue
+		}
+		possibleDepths = append(possibleDepths, d)
+	}
+	for _, depth := range possibleDepths {
+		address := newAddress(s, depth)
+		if address != "" {
+			res = append(res, address)
+		}
+	}
+	return res
+}
+
+func newAddress(s string, depths []int) string {
+	res := ""
+	charIx := 0
+	for i, num := range depths {
+		if i > 0 {
+			res += "."
+		}
+		segment := ""
+		for j := 0; j < num; j++ {
+			char := s[charIx+j]
+
+			switch {
+			case j == 0 && j+1 < num && char == '0':
+				return ""
+			default:
+				segment += string(char)
+			}
+		}
+		number, _ := strconv.Atoi(segment)
+		if len(segment) == 0 || number > 255 {
+			return ""
+		}
+		res += segment
+		charIx += num
+	}
+	return res
+}
+
+func depths(ix int, len int) []int {
+	res := []int{1, 1, 1, 1}
+
+	for i := 3; i >= 0; i-- {
+		newDepth := ix % 3
+		if newDepth > 0 {
+			res[i] += newDepth
+			ix -= newDepth
+		}
+		ix /= 3
+	}
+	totalLen := res[0] + res[1] + res[2] + res[3]
+	if totalLen != len {
+		return nil
+	}
+	return res
 }
 
 type TreeNode[T any] struct {
